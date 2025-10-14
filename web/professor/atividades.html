@@ -1,0 +1,66 @@
+<!-- ./web/atividades.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Atividades da Turma</title>
+  <style>
+    body{font-family:Arial;margin:20px;}
+    .atividade{border:1px solid #ddd;padding:8px;margin:6px 0;border-radius:6px;}
+  </style>
+</head>
+<body>
+  <header style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <strong id="profNome">Professor</strong>
+    </div>
+    <div>
+      <button onclick="logout()">Sair</button>
+      <button id="btnCadastrarAtividade">Cadastrar atividade</button>
+    </div>
+  </header>
+
+  <h3 id="tituloTurma">Atividades</h3>
+  <div id="lista">Carregando...</div>
+
+  <script>
+    const API_BASE = 'http://localhost:3001';
+    const params = new URLSearchParams(location.search);
+    const turma_id = params.get('turma_id');
+    const turma_nome = params.get('turma_nome');
+
+    document.getElementById('tituloTurma').textContent = 'Turma: ' + (turma_nome || turma_id);
+
+    document.getElementById('btnCadastrarAtividade').addEventListener('click', () => {
+      location.href = `cadastrar_atividade.html?turma_id=${turma_id}&turma_nome=${encodeURIComponent(turma_nome)}`;
+    });
+
+    async function carregar() {
+      try {
+        const me = await (await fetch(API_BASE + '/api/me', { credentials: 'include' })).json();
+        if (!me.professor) { location.href = 'login.html'; return; }
+        document.getElementById('profNome').textContent = me.professor.nome;
+
+        const r = await (await fetch(API_BASE + `/api/turmas/${turma_id}/atividades`, { credentials: 'include' })).json();
+        if (r.error) { document.getElementById('lista').textContent = r.error; return; }
+        const cont = document.getElementById('lista');
+        cont.innerHTML = '';
+        if (r.atividades.length === 0) cont.innerHTML = '<p>Nenhuma atividade</p>';
+        r.atividades.forEach(a => {
+          const d = document.createElement('div');
+          d.className = 'atividade';
+          d.textContent = `${a.id} - ${a.descricao}`;
+          cont.appendChild(d);
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    async function logout() {
+      await fetch(API_BASE + '/api/logout', { method: 'POST', credentials: 'include' });
+      location.href = 'login.html';
+    }
+
+    carregar();
+  </script>
+</body>
+</html>

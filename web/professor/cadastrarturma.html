@@ -1,0 +1,36 @@
+<!-- ./web/cadastrar_turma.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cadastrar Turma</title>
+  <style>body{font-family:Arial;margin:20px;}input{padding:8px;width:300px}button{padding:8px;margin-left:6px}</style>
+</head>
+<body>
+  <h3>Cadastrar Turma</h3>
+  <input id="nome" placeholder="Nome da turma">
+  <button id="cadastrar">Cadastrar</button>
+  <button onclick="location.href='professor.html'">Voltar</button>
+  <p id="msg" style="color:red"></p>
+
+  <script>
+    const API_BASE = 'http://localhost:3001';
+    document.getElementById('cadastrar').addEventListener('click', async () => {
+      const nome = document.getElementById('nome').value;
+      try {
+        const res = await fetch(API_BASE + '/api/turmas', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome })
+        });
+        const data = await res.json();
+        if (!res.ok) { document.getElementById('msg').textContent = data.error || 'Erro'; return; }
+        window.location.href = 'professor.html';
+      } catch (err) {
+        document.getElementById('msg').textContent = 'Erro no servidor';
+      }
+    });
+  </script>
+</body>
+</html>

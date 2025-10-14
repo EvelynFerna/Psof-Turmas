@@ -1,0 +1,39 @@
+<!-- ./web/cadastrar_atividade.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cadastrar Atividade</title>
+  <style>body{font-family:Arial;margin:20px;}textarea{width:400px;height:120px;padding:8px}</style>
+</head>
+<body>
+  <h3 id="h">Cadastrar Atividade</h3>
+  <textarea id="descricao" placeholder="Descrição da atividade"></textarea><br>
+  <button id="cadastrar">Cadastrar</button>
+  <button onclick="history.back()">Voltar</button>
+  <p id="msg" style="color:red"></p>
+
+  <script>
+    const API_BASE = 'http://localhost:3001';
+    const params = new URLSearchParams(location.search);
+    const turma_id = params.get('turma_id');
+
+    document.getElementById('cadastrar').addEventListener('click', async () => {
+      const descricao = document.getElementById('descricao').value;
+      try {
+        const res = await fetch(API_BASE + `/api/turmas/${turma_id}/atividades`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ descricao })
+        });
+        const data = await res.json();
+        if (!res.ok) { document.getElementById('msg').textContent = data.error || 'Erro'; return; }
+        window.location.href = `atividades.html?turma_id=${turma_id}&turma_nome=${params.get('turma_nome')}`;
+      } catch (err) {
+        document.getElementById('msg').textContent = 'Erro no servidor';
+      }
+    });
+  </script>
+</body>
+</html>
