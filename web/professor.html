@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Professor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #a0d8f1, #67c8f5);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .header {
+            background: #007acc;
+            color: white;
+            padding: 1rem;
+            width: 100%;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+        }
+        .button {
+            background-color: #ffffff;
+            color: #007acc;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #005f99;
+            color: white;
+        }
+        .content {
+            width: 80%;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+        .turma-list {
+            margin-top: 2rem;
+            width: 100%;
+            text-align: left;
+        }
+        .turma-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .turma-list th, .turma-list td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .actions button {
+            background-color: #f44336;
+            margin-right: 5px;
+        }
+        .actions button.view {
+            background-color: #4CAF50;
+        }
+        .actions button.delete {
+            background-color: #f44336;
+        }
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+        #closeModal {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        #closeModal:hover,
+        #closeModal:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bem-vindo</h1>
+            <button class="button" id="logoutButton">Sair</button>
+            <button class="button" onclick="window.location.href='atividades.html'">Ir para Atividades</button>
+        </div>
+        <div class="content">
+            <button id="cadastrarTurmaButton" class="button">Cadastrar Nova Turma</button>
+            <div id="modal">
+                <div class="modal-content">
+                    <span id="closeModal" style="cursor:pointer;">&times;</span>
+                    <h2>Cadastrar Nova Turma</h2>
+                    <form id="turmaForm">
+                        <label for="numero">Número da Turma</label>
+                        <input type="text" id="numero" name="numero" required>
+                        <label for="nome">Nome da Turma</label>
+                        <input type="text" id="nome" name="nome" required>
+                        <button type="submit" class="button">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="turma-list">
+                <h2>Listagem de Turmas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Nome da Turma</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="turmaTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="js/js1.js"></script>
+</body>
+</html>
